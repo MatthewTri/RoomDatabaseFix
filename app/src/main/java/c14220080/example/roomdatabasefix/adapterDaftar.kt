@@ -4,12 +4,19 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import c14220080.example.roomdatabasefix.database.daftarBelanja
+import c14220080.example.roomdatabasefix.databaseHistory.daftarHistory
+import c14220080.example.roomdatabasefix.databaseHistory.daftarHistoryDB
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
 class adapterDaftar (private val daftarBelanja : MutableList<daftarBelanja>):
     RecyclerView.Adapter<adapterDaftar.ListViewHolder>() {
+
         private lateinit var onItemClickCallback : OnItemClickCallback
 
         interface OnItemClickCallback {
@@ -26,6 +33,7 @@ class adapterDaftar (private val daftarBelanja : MutableList<daftarBelanja>):
 
         var _btnEdit= itemView.findViewById<TextView>(R.id.edit)
         var _btnDelete= itemView.findViewById<TextView>(R.id.delete)
+        var _btnSelesai = itemView.findViewById<Button>(R.id.selesai)
     }
 
 
@@ -56,6 +64,21 @@ class adapterDaftar (private val daftarBelanja : MutableList<daftarBelanja>):
             onItemClickCallback.delData(daftar)
         }
 
+        holder._btnSelesai.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).async {
+                // Insert the data into databaseHistory
+                val historyDB = daftarHistoryDB.getDatabase(it.context)
+                historyDB.fundaftarHistoryDAO().insert(
+                    daftarHistory(
+                        tanggal = daftar.tanggal,
+                        item = daftar.item,
+                        jumlah = daftar.jumlah
+                    )
+                )
+                // Delete the data from the current database
+                onItemClickCallback.delData(daftar)
+            }
+        }
 
     }
 
