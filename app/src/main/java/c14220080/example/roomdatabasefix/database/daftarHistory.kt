@@ -1,4 +1,4 @@
-package c14220080.example.roomdatabasefix.databaseHistory
+package c14220080.example.roomdatabasefix.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

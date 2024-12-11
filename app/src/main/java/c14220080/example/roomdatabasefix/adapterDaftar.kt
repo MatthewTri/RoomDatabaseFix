@@ -8,8 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import c14220080.example.roomdatabasefix.database.daftarBelanja
-import c14220080.example.roomdatabasefix.databaseHistory.daftarHistory
-import c14220080.example.roomdatabasefix.databaseHistory.daftarHistoryDB
+import c14220080.example.roomdatabasefix.database.daftarBelanjaDB
+import c14220080.example.roomdatabasefix.database.daftarHistory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -67,7 +67,7 @@ class adapterDaftar (private val daftarBelanja : MutableList<daftarBelanja>):
         holder._btnSelesai.setOnClickListener {
             CoroutineScope(Dispatchers.IO).async {
                 // Insert the data into databaseHistory
-                val historyDB = daftarHistoryDB.getDatabase(it.context)
+                val historyDB = daftarBelanjaDB.getDatabase(it.context)
                 historyDB.fundaftarHistoryDAO().insert(
                     daftarHistory(
                         tanggal = daftar.tanggal,
